@@ -9,7 +9,7 @@ tqdm
 tensorboardX
 colorlog
 scipy
-jupyter notebook
+notebook
 pandas
 h5py
 av
