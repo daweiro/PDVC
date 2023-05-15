@@ -70,5 +70,7 @@ python video_backbone/TSP/extract_features/extract_features.py \
 echo "START Dense-Captioning"
 python eval.py --eval_mode test --eval_save_dir $OUTPUT_FOLDER --eval_folder generated_captions --eval_model_path $PDVC_MODEL_PATH --test_video_feature_folder $FEATURE_DIR --test_video_meta_data_csv_path $METADATA_CSV_FILENAME
 
-echo "START VISUALIZATION"
-python visualization/visualization.py --input_mp4_folder $DATA_PATH --output_mp4_folder  $OUTPUT_FOLDER/vis_videos --dvc_file $OUTPUT_FOLDER/generated_captions/dvc_results.json --output_language $OUTPUT_LANGUAGE
+#enlever les # si on veut le captioning dans les videos en plus de JSON
+
+#echo "START VISUALIZATION"
+#python visualization/visualization.py --input_mp4_folder $DATA_PATH --output_mp4_folder  $OUTPUT_FOLDER/vis_videos --dvc_file $OUTPUT_FOLDER/generated_captions/dvc_results.json --output_language $OUTPUT_LANGUAGE
