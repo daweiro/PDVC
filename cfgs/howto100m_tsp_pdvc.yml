@@ -6,9 +6,9 @@ invalid_video_json: []
 
 feature_dim: 1024
 
-train_caption_file: 'data/howto100m/captiondata/howto100m_train.json'
-val_caption_file: 'data/howto100m/captiondata/howto100m_val.json'
-gt_file_for_eval: ['data/howto100m/captiondata/howto100m_val.json']
+train_caption_file: 'data/howto100m/captiondata/formatted_captions_train.json'
+val_caption_file: 'data/howto100m/captiondata/formatted_captions_val.json'
+gt_file_for_eval: ['data/howto100m/captiondata/formatted_captions_val.json']
 #gt_file_for_para_eval: ['data/howto100m/captiondata/para/para_howto100m_val.json']
 #dict_file: data/howto100m/vocabulary_youcook2.json
 #vocab_size: 1607
