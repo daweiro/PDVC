@@ -1,0 +1,11 @@
+id: howto100m-tsp_anet_tsp_pdvc
+base_cfg_path: cfgs/anet_c3d_pdvc.yml
+visual_feature_type: ['tsp']
+visual_feature_folder: ['data/howto100m-tsp/features/tsp']
+invalid_video_json: []
+feature_dim: 512
+
+train_caption_file: 'data/howto100m-tsp/captiondata/formatted_captions_train.json'
+val_caption_file: 'data/howto100m-tsp/captiondata/formatted_captions_val.json'
+gt_file_for_eval: ['data/howto100m-tsp/captiondata/formatted_captions_val.json']
+gt_file_for_para_eval: ['data/howto100m-tsp/captiondata/para/para_formatted_captions_val.json']
