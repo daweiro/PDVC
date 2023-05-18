@@ -5,6 +5,7 @@ visual_feature_folder: ['data/howto100m/features/tsp']
 invalid_video_json: []
 
 feature_dim: 1024
+input_encoding_size: 1024
 
 train_caption_file: 'data/howto100m/captiondata/formatted_captions_train.json'
 val_caption_file: 'data/howto100m/captiondata/formatted_captions_val.json'

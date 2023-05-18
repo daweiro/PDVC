@@ -95,7 +95,10 @@ def train(opt):
         elif opt.start_from_mode == 'last':
             model_pth = torch.load(os.path.join(save_folder, 'model-last.pth'))
         logger.info('Loading pth from {}, iteration:{}'.format(save_folder, iteration))
-        model.load_state_dict(model_pth['model'])
+        try:
+            model.load_state_dict(model_pth['model'])
+        except RuntimeError as e:
+            print('Ignoring "' + str(e) + '"')
 
     # Load the pre-trained model
     if opt.pretrain and (not opt.start_from):
@@ -105,15 +108,24 @@ def train(opt):
         if opt.pretrain == 'encoder':
             encoder_filter = model.get_filter_rule_for_encoder()
             encoder_pth = {k:v for k,v in model_pth['model'].items() if encoder_filter(k)}
-            model.load_state_dict(encoder_pth, strict=True)
+            try:
+                model.load_state_dict(encoder_pth, strict=True)
+            except RuntimeError as e:
+                print('Ignoring "' + str(e) + '"')
         elif opt.pretrain == 'decoder':
             encoder_filter = model.get_filter_rule_for_encoder()
             decoder_pth = {k:v for k,v in model_pth['model'].items() if not encoder_filter(k)}
-            model.load_state_dict(decoder_pth, strict=True)
+            try:
+                model.load_state_dict(decoder_pth, strict=True)
+            except RuntimeError as e:
+                print('Ignoring "' + str(e) + '"')
             pass
         elif opt.pretrain == 'full':
             # model_pth = transfer(model, model_pth)
-            model.load_state_dict(model_pth['model'], strict=True)
+            try:
+                model.load_state_dict(model_pth['model'], strict=True)
+            except RuntimeError as e:
+                print('Ignoring "' + str(e) + '"')
         else:
             raise ValueError("wrong value of opt.pretrain")
 
@@ -129,7 +141,10 @@ def train(opt):
     lr_scheduler = torch.optim.lr_scheduler.MultiStepLR(optimizer, milestone, gamma=opt.learning_rate_decay_rate)
 
     if opt.start_from:
-        optimizer.load_state_dict(model_pth['optimizer'])
+        try:
+            optimizer.load_state_dict(model_pth['optimizer'])
+        except RuntimeError as e:
+            print('Ignoring "' + str(e) + '"')
         lr_scheduler.step(epoch-1)
 
     # print the args for debugging
