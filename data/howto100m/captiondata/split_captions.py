@@ -1,8 +1,8 @@
 import pandas as pd
-import itertools
 import argparse
 import sys
 import logging
+import os
 
 
 def config_logger(verbose=False, logdir="./"):
@@ -73,14 +73,6 @@ def parse_args():
         help="Input file to be used",
     )
     optional.add_argument(
-        "--output-file",
-        "-o",
-        dest="output_file",
-        action="store",
-        type=argparse.FileType('wb'),
-        help="Output file to be used",
-    )
-    optional.add_argument(
         "--execute",
         "-e",
         dest="execute",
@@ -93,26 +85,36 @@ def parse_args():
     return parser.parse_args()
 
 
-def process_json(input_file, output_file):
+def process_json(input_file):
     df = pd.read_json(input_file)
-    logging.debug("First load:%s", df)
     df = df.T
-    logging.debug("After transpo:%s", df)
-    df['timestamps'] = df[["start", "end"]].apply(lambda x: [[start, end] for start, end in itertools.zip_longest(x[0], x[1], fillvalue=-1)], axis=1)
-    logging.info("After timestamps: %s", df)
-    df['duration'] =  df["end"].apply(lambda x: x[-1])
-    logging.info("After duration: %s", df)
-    df = df.rename(columns={'text': 'sentences'})
-    logging.info("After sentences: %s", df)
-    df = df.drop('start', axis=1)
-    df = df.drop('end', axis=1)
-    logging.info("Final result: %s", df)
-    df = df.T
-    df.to_json(output_file)
+    file_name = os.path.basename(input_file.name).split(".", 1)[0]
+    file_path = os.path.dirname(os.path.abspath(input_file.name))
+    # Generate train
+    logging.info("Generating train")
+    train=df.sample(frac=0.6,random_state=200)
+    # Generate test
+    logging.info("Generating test")
+    pre_test=df.drop(train.index)
+    test=pre_test.sample(frac=0.2,random_state=200)
+    # Generate val
+    logging.info("Generating val")
+    val=pre_test.drop(test.index)
+
+    # Write train
+    train = train.T
+    train.to_json(f"{file_path}/{file_name}_train.json")
+    # Write test
+    test = test.T
+    test.to_json(f"{file_path}/{file_name}_test.json")
+    # Write val
+    val = val.T
+    val.to_json(f"{file_path}/{file_name}_val.json")
+
 
 def main(args):
     logging.debug("Starting processing")
-    process_json(input_file=args.input_file, output_file=args.output_file)
+    process_json(input_file=args.input_file)
     logging.debug("End of processing")
 
 if __name__ == "__main__":
