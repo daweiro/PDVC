@@ -10,7 +10,7 @@ def config_logger(verbose=False, logdir="./"):
     :param: verbose, boolean if DEBUG activated
     :return:
     """
-    nameofscript = "generate_captions"
+    nameofscript = "split_captions"
 
     c_handler = logging.StreamHandler()
     f_handler = logging.FileHandler(logdir + nameofscript + ".log")
@@ -43,7 +43,7 @@ def config_logger(verbose=False, logdir="./"):
 
 def parse_args():
     """Parse the scripts args"""
-    parser = argparse.ArgumentParser(description="Generate caption from howto format to PDVC format")
+    parser = argparse.ArgumentParser(description="Split captions into train, test, val captions")
     optional = parser._action_groups.pop()
     # Manage required args
     # required = parser.add_argument_group('required arguments')
